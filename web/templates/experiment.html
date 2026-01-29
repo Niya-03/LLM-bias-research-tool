@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    
+
     {% include "partials/header.html" %}
 
     <div class="container">
@@ -27,10 +27,10 @@
                     <form>
                         <div class="text-start">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете dataset</label>
-                            <select class="form-select" aria-label="Default select example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Select dataset">
+                                {% for d in datasets %}
+                                <option value="{{ d }}" {% if d==selected_dataset %}selected{% endif %}>{{ d }}</option>
+                                {% endfor %}
                             </select>
                             <p class="opacity-75 mt-1">Dataset е колекция от твърдения, групирани по език и категории.
                             </p>
@@ -38,10 +38,10 @@
 
                         <div class="text-start mt-3">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете категория</label>
-                            <select class="form-select" aria-label="Default select example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Select a category">
+                                {% for c in categories %}
+                                <option value="{{ c }}" >{{ c }}</option>
+                                {% endfor %}
                             </select>
                             <p class="opacity-75 mt-1">Категорията представлява вида пристрастие, което се изследва.</p>
 
@@ -49,10 +49,10 @@
 
                         <div class="text-start mt-3">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете модел</label>
-                            <select class="form-select" aria-label="Default select example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Select a model">
+                                {% for m in models %}
+                                <option value="{{ m }}" >{{ m }}</option>
+                                {% endfor %}
                             </select>
                             <p class="opacity-75 mt-1">Твърденията ще бъдат зададени на избрания модел.</p>
                         </div>
