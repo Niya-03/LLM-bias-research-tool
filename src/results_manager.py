@@ -4,15 +4,24 @@ from datetime import datetime
 from config import RESULTS_DIR
 
 def save_results(results, category, model):
-    en_counts = Counter(results["en"])
-    bg_counts = Counter(results["bg"])
+    pos_en_counts = Counter(results["positive"]["en"])
+    pos_bg_counts = Counter(results["positive"]["bg"])
+    
+    neg_en_counts = Counter(results["negative"]["en"])
+    neg_bg_counts = Counter(results["negative"]["bg"])
+    
 
     results_final = {
         "category": category,
-        "counts" : {
-            "en": en_counts,
-            "bg": bg_counts
+        "positive":{
+            "en": pos_en_counts,
+            "bg": pos_bg_counts
+        },
+        "negative":{
+            "en": neg_en_counts,
+            "bg": neg_bg_counts
         }
+        
     }
 
     file_path = "%s/%s_%s_results_%s.json" % (RESULTS_DIR, category, model, str(datetime.today().strftime('%Y-%m-%d')))

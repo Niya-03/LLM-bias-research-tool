@@ -1,3 +1,18 @@
 .logoSize{
     width: 2.5rem;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body > .container,
+body > div:not(footer) {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}

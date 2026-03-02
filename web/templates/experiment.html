@@ -21,7 +21,7 @@
         <div class="row mt-5 text-center">
             <h2>Експериментиране</h1>
         </div>
-        <div class="mx-4">
+        
             <div class="row mt-3 justify-content-center">
                 <div class="col col-12 col-lg-6  text-center ">
                     <form>
@@ -38,9 +38,9 @@
 
                         <div class="text-start mt-3">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете категория</label>
-                            <select class="form-select" aria-label="Select a category">
+                            <select id="categorySelect" class="form-select" aria-label="Select a category">
                                 {% for c in categories %}
-                                <option value="{{ c }}" >{{ c }}</option>
+                                <option value="{{ c }}">{{ c }}</option>
                                 {% endfor %}
                             </select>
                             <p class="opacity-75 mt-1">Категорията представлява вида пристрастие, което се изследва.</p>
@@ -48,25 +48,33 @@
                         </div>
 
                         <div class="text-start mt-3">
+                            <label for="" class="form-label mb-1 fw-semibold">Изберете подкатегория</label>
+                            <select id="subcategorySelect" class="form-select" aria-label="Select a subcategory">
+                                <option value="">Първо изберете категория</option>
+                            </select>
+                            <p class="opacity-75 mt-1">Подкатегорията е конкретна група, която ще се изследва.</p>
+
+                        </div>
+
+                        <div class="text-start mt-3">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете модел</label>
                             <select class="form-select" aria-label="Select a model">
                                 {% for m in models %}
-                                <option value="{{ m }}" >{{ m }}</option>
+                                <option value="{{ m }}">{{ m }}</option>
                                 {% endfor %}
                             </select>
                             <p class="opacity-75 mt-1">Твърденията ще бъдат зададени на избрания модел.</p>
                         </div>
+                    </form>
                 </div>
 
-                </form>
-
             </div>
-            <div class="row mt-3">
+            <div class="row mt-3 mb-5">
                 <div class="col col-12 text-center mt-2">
-                    <button class="btn btn-primary">Генерирай резултати</button>
+                    <button id="resultsBtn" class="btn btn-primary">Генерирай резултати</button>
                 </div>
             </div>
-        </div>
+        
 
 
     </div>
@@ -74,6 +82,7 @@
     {% include "partials/footer.html" %}
 
     <script type="module" src="../static/js/main.js"></script>
+    <script src="../static/js/experiment.js"></script>
 </body>
 
 </html>

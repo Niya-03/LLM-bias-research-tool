@@ -1,5 +1,5 @@
-BASE_DATASET_PATH = "data/datasets/base_dataset.csv"
-RESULTS_DIR = "data/results"
+BASE_DATASET_PATH = "data/datasets/2base_dataset.csv"
+RESULTS_DIR = "data\\results\\"
 DIAGRAMS_DIR = "data/diagrams"
 
 SUPPORTED_MODELS = [
@@ -7,3 +7,8 @@ SUPPORTED_MODELS = [
     "gemini",
     "llama"
 ]
+
+AGREE_ANS = 0
+DISAGREE_ANS = 1
+NO_OPINION_ANS = 2
+INVALID_ANS = 3

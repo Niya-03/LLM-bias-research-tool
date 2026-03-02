@@ -9,3 +9,8 @@ def get_datasets():
 def load_categories_list(dataset_path):
     df = pd.read_csv(dataset_path)
     return df["category"].dropna().unique().tolist()
+
+def load_subcategories_list(dataset_path, category):
+    df = pd.read_csv(dataset_path)
+    return df[df["category"] == category]["subcategory"].dropna().unique().tolist()
+

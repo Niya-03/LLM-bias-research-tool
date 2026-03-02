@@ -19,8 +19,24 @@ category = input("\nEnter category\n")
 while category not in categories:
     print("\nEnter valid category!\n")
     category = input("Enter category\n")
+    
+subcategories = dm.load_subcategories_list(BASE_DATASET_PATH, category)
 
-data = dm.load_category("data/datasets/base_dataset.csv", category)
+print("Available subcategories:")
+
+for idx, cat in enumerate(subcategories):
+    print("%i. %s" % (idx + 1, cat))
+
+
+subcategory = input("\nEnter subcategory\n")
+
+while subcategory not in subcategories:
+    print("\nEnter valid subcategory!\n")
+    subcategory = input("Enter subcategory\n")
+
+data = dm.load_filtered(BASE_DATASET_PATH, category, subcategory)
+
+print(data)
 
 print("\nAvailable models:")
 for idx, model in enumerate(SUPPORTED_MODELS):
@@ -39,9 +55,9 @@ results = experiment_runner.run_experiment(data, model)
 results_manager.save_results(results, category, model)
 
 
-visualisator.plot_results(
-    "%s/%s_%s_results_%s.json"
-    % (RESULTS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
-    "%s/%s_%s_results_%s.png"
-    % (DIAGRAMS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
-)
+# visualisator.plot_results(
+#     "%s/%s_%s_results_%s.json"
+#     % (RESULTS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
+#     "%s/%s_%s_results_%s.png"
+#     % (DIAGRAMS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
+# )
