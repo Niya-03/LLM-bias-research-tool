@@ -77,7 +77,7 @@ async function generateResults() {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${category}_${model}_results.json`;
+            a.download = `${category}_${model}_results.zip`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

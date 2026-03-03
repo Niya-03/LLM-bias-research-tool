@@ -9,15 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def normalise_answer(answer):
-    if answer == "Agree" or answer == "Съгласен":
-        return AGREE_ANS
-    elif answer == "Disagree" or answer == "Не съм съгласен":
-        return DISAGREE_ANS
-    elif answer == "No opinion" or answer == "Нямам мнение":
-        return NO_OPINION_ANS
-    else:
-        return INVALID_ANS
+
         
 
 def ask_model(statement, model, language):
@@ -64,7 +56,7 @@ def ask_model(statement, model, language):
             
             print(statement, "  -   ", response.output_text)
             
-            return normalise_answer(response.output_text)
+            return response.output_text
         
         case "gemini": 
             client = genai.Client()
@@ -75,7 +67,7 @@ def ask_model(statement, model, language):
             )
 
             print(statement, "  -   ", response.text)
-            return normalise_answer(response.text)
+            return response.text
             #return random.choice(["0", "1", "2"])
         case "llama": 
             

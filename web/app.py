@@ -2,6 +2,9 @@ from datetime import datetime
 import json
 import os
 from time import sleep
+import zipfile
+from io import BytesIO
+import pandas as pd
 from flask import Flask, request, Response, send_file
 import flask
 from flask_cors import CORS
@@ -43,6 +46,38 @@ def experiment():
         models = models,
         selected_dataset = selected_dataset
         )
+    
+@app.route("/addDataset", methods=["GET"])
+def addDataset():    
+    return flask.render_template("addDataset.html")
+
+@app.route("/api/add-dataset", methods=["POST"])
+def add_dataset():
+    if "file" not in request.files:
+        return flask.jsonify({"error": "No file provided"}), 400
+    
+    file = request.files['file']
+    
+    if not file.filename.endswith('.csv'):
+        return flask.jsonify({"error": "Only CSV files allowed"}), 400
+
+    try:
+        datasets_dir = os.path.join(PROJECT_ROOT, "data/datasets")
+        os.makedirs(datasets_dir, exist_ok=True)
+        filepath = os.path.join(datasets_dir, file.filename)
+        file.save(filepath)
+        
+        df = pd.read_csv(filepath)
+        required_columns = {"category", "subcategory", "polarity", "bg_statement", "en_statement"}
+        missing_columns = required_columns - set(df.columns)
+        
+        if missing_columns:
+            os.remove(filepath)
+            return flask.jsonify({"error": f"Липсват колоните: {', '.join(missing_columns)}"}), 400
+        
+        return flask.jsonify({"message": "Dataset uploaded successfully"}), 200
+    except Exception as e:
+        return flask.jsonify({"error": str(e)}), 500
 
 @app.route("/results", methods=["GET"])
 def results():
@@ -87,19 +122,32 @@ def generate_results():
         
         results = experiment_runner.run_experiment(filtered_data, model)
         
-        results_manager.save_results(results, category, model)
+        results_manager.save_results(results["results"], category, model)
+        results_manager.save_results_raw(results["resultsRaw"], category, model)
         
-        filename = f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.json"
-        filepath = os.path.join(PROJECT_ROOT, RESULTS_DIR.strip("\\"), filename)
+        
+        results_filename = f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.json"
+        resultsRaw_filename = f"{category}_{model}_raw-results_{datetime.today().strftime('%Y-%m-%d')}.json"
+        
+        results_filepath = os.path.join(PROJECT_ROOT, RESULTS_DIR.strip("\\"), results_filename)
+        resultsRaw_filepath = os.path.join(PROJECT_ROOT, RESULTS_DIR.strip("\\"), resultsRaw_filename)
 
-        if not os.path.exists(filepath):
-            return flask.jsonify({"error": f"Results file not found at: {filepath}"}), 500
+       
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            if os.path.exists(results_filepath):
+                zipf.write(results_filepath, arcname=results_filename)
+            if os.path.exists(resultsRaw_filepath):
+                zipf.write(resultsRaw_filepath, arcname=resultsRaw_filename)
+        
+        zip_buffer.seek(0)
+        zip_filename = f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.zip"
         
         return send_file(
-            filepath,
+            zip_buffer,
             as_attachment=True,
-            download_name=filename,
-            mimetype="application/json"
+            download_name=zip_filename,
+            mimetype="application/zip"
         )
     except Exception as e:
         return flask.jsonify({"error": str(e)}), 500

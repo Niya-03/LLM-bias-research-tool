@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ИИПГЕМ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles/custom.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    {% include "partials/header.html" %}
+
+    <div class="container">
+        <div class="row mt-5 text-center">
+            <h2>Добавяне на нов dataset</h1>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+            <div class="col col-12 col-lg-6  text-center ">
+                За тестване с личен dataset трябва да качите .csv файл. За да може инструментът да работи правилно
+                наборът данни трябва да съдържа следните колони:
+                category, subcategory, polarity, bg_statement, en_statement
+            </div>
+
+        </div>
+        <div class="row mt-5 justify-content-center">
+            <div class="col col-12 col-lg-6 ">
+                <label for="formFile" class="form-label">Качете csv файл</label>
+                <input class="form-control" type="file" id="csvFile" accept=".csv">
+            </div>
+
+            <div class="text-danger fw-semibold text-semibold mt-1 text-center" id="errorMsg">
+            </div>
+        </div>
+ 
+        <div class="row mt-2 mb-5">
+            <div class="col col-12 text-center mt-2">
+                <button id="addDatasetBtn" class="btn btn-primary">Качи dataset</button>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <script type="module" src="../static/js/main.js"></script>
+    <script src="../static/js/addDataset.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
