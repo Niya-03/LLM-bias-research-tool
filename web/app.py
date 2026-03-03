@@ -79,6 +79,11 @@ def add_dataset():
     except Exception as e:
         return flask.jsonify({"error": str(e)}), 500
 
+
+@app.route("/addStatement", methods=["GET"])
+def addStatement():
+    return flask.render_template("addStatement.html")
+
 @app.route("/results", methods=["GET"])
 def results():
     return flask.render_template("results.html")

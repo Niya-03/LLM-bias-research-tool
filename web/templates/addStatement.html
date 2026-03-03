@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ИИПГЕМ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles/custom.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    {% include "partials/header.html" %}
+
+    <div class="container">
+        <div class="row mt-5 text-center">
+            <h2>Добавяне на нов ред</h1>
+        </div>
+
+        <div class="row mt-3 ">
+            <div class="col col-6  text-center ">
+
+                <div class="text-start">
+                    <label for="" class="form-label mb-1 fw-semibold">Изберете dataset</label>
+                    <select class="form-select" aria-label="Select dataset">
+                        {% for d in datasets %}
+                        <option value="{{ d }}" {% if d==selected_dataset %}selected{% endif %}>{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="opacity-75 mt-1">Dataset е колекция от твърдения, групирани по език и категории.
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row mb-5">
+            <div class="col text-end">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input"  type="radio" name="categoryOption" id="existingCategoryRadio"
+                        value="option1">
+                    <label class="form-check-label" for="existingCategoryRadio">Използване на съществуваща
+                        категория</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="categoryOption" id="newCategoryRadio"
+                        value="option2">
+                    <label class="form-check-label" for="newCategoryRadio">Добавяне на нова категория</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 pb-4 ">
+            <div class="col col-12 pb-4 pb-md-0 col-md-6 border-end border-md-end border-dark ">
+                <div class="text-start">
+                    <label for="" class="form-label mb-1 fw-semibold">Изберете категория</label>
+                    <select id="categorySelect" class="form-select" aria-label="Select a category">
+                        {% for c in categories %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="text-start mt-3">
+                        <label for="" class="form-label mb-1 fw-semibold">Изберете подкатегория</label>
+                        <select id="subcategorySelect" class="form-select" aria-label="Select a subcategory">
+                            <option value="">Първо изберете категория</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col col-12 col-md-6 mt-3 mt-md-0">
+                <div class="text-start">
+                    <label for="" class="form-label mb-1 fw-semibold">Категория</label>
+                    <input type="text" class="form-control" id="categoryInput">
+
+                    <div class="text-start mt-3">
+                        <label for="" class="form-label mb-1 fw-semibold">Подкатегория</label>
+                        <input type="text" class="form-control" id="subcategoryInput">
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row mt-3 mb-3">
+            <div class="col col-6  ">
+                <div class="text-start ">
+                    <label for="" class="form-label mb-1 fw-semibold">Изберете полярност на твърдението</label>
+                    <select id="subcategorySelect" class="form-select" aria-label="Select polarity">
+                        <option value="">positive</option>
+                        <option value="">negative</option>
+                    </select>
+                    <p class="opacity-75 mt-1">Полярността указва дали твърдението за дадената група е положително или негативно.
+                            </p>
+                </div>
+            </div>
+
+
+            <div class="col col-12  mt-2">
+                <label for="" class="form-label mb-1 fw-semibold">Твърдение на английски</label>
+                <input type="text" class="form-control" id="statementEn">
+            </div>
+
+            <div class="col col-12  mt-2">
+                <label for="" class="form-label mb-1 fw-semibold">Твърдение на български</label>
+                <input type="text" class="form-control" id="statementBg">
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col col-12 text-center mt-2">
+                <button id="addStatementBtn" class="btn btn-primary">Добави ред</button>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <script type="module" src="../static/js/main.js"></script>
+    <script src="../static/js/addStatement.js"></script>
+</body>
+
+</html>

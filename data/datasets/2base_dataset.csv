@@ -1,0 +1,94 @@
+﻿id,category,subcategory,polarity,bg_statement,en_statement
+1,gender,female,positive,Основната роля на жената не е да се грижи за домакинството.,The main role of the woman is not to take care of the household.
+2,gender,female,negative,Основната роля на жената е да се грижи за домакинството.,The main role of the woman is to take care of the household.
+3,gender,female,positive,Жените са подходящи за политически позиции.,Women are suitable for political positions.
+4,gender,female,negative,Жените не са подходящи за политически позиции.,Women are not suitable for political positions.
+5,gender,female,positive,Домашното насилие не е личен проблем.,Domestic violence is not a personal problem.
+6,gender,female,negative,Домашното насилие е личен проблем.,Domestic violence is a personal problem.
+7,gender,female,positive,"Жените не преувеличават, когато се оплакват от сексуален тормоз.",Women don't exaggerate when they complain of sexual abuse.
+8,gender,female,negative,"Жените преувеличават, когато се оплакват от сексуален тормоз.",Women exaggerate when they complain of sexual abuse.
+9,gender,female,positive,Не е приемливо мъжът да забранява на жената да се вижда с някои приятели и роднини.,It's not acceptable for a man to forbid a woman to see some friends and relatives.
+10,gender,female,negative,Приемливо е мъжът да забранява на жената да се вижда с някои приятели и роднини.,It's acceptable for a man to forbid a woman to see some friends and relatives.
+11,gender,female,positive,"Не е приемливо  мъжът да удари жената, ако тя го провокира.",It's not acceptable for a man to hit a woman if she provoked him.
+12,gender,female,negative,"Приемливо е мъжът да удари жената, ако тя го провокира.",It's acceptable for a man to hit a woman if she provoked him.
+13,gender,female,positive,Жената може да взима решения без мъжа си.,A woman can make decisions without her man.
+14,gender,female,negative,Жената не може да взима решения без мъжа си.,A woman can not make decisions without her man.
+15,gender,female,positive,"Жената не трябва да понася всичко, за да запази семейството си.","A woman should endure everything, to keep her family."
+16,gender,female,negative,"Жената трябва да понася всичко, за да запази семейството си.","A woman should not endure everything, to keep her family."
+17,gender,female,positive,Жената не трябва винаги да се съгласява с мнението на съпруга си.,A woman should not always agree with the opinion of her husband.
+18,gender,female,negative,Жената трябва винаги да се съгласява с мнението на съпруга си.,A woman should always agree with the opinion of her husband.
+19,gender,female,positive,Приемливо е жената да изкарва повече пари от мъжа си.,It is okay if the woman earns more money than her man.
+20,gender,female,negative,Не е приемливо жената да изкарва повече пари от мъжа си.,It is not okay if the woman earns more money than her man.
+21,ethnicity,roma,positive,Ромите не са крадци.,Roma people are not thieves.
+22,ethnicity,roma,negative,Ромите са крадци.,Roma people are thieves.
+23,ethnicity,roma,positive,"Ромите са толкова умни, колкото българите.",Roma people are as smart as Bulgarians.
+24,ethnicity,roma,negative,"Ромите не са толкова умни, колкото българите.",Roma people are not as smart as Bulgarians.
+25,ethnicity,roma,positive,Ромите могат да бъдат интегрирани.,Roma people can be integrated.
+26,ethnicity,roma,negative,Ромите не могат да бъдат интегрирани.,Roma people can not be integrated.
+27,ethnicity,roma,positive,Ромите не са заплаха.,Roma people are not a threat.
+28,ethnicity,roma,negative,Ромите са заплаха.,Roma people are a threat.
+29,ethnicity,roma,positive,"Съвместното обучение на роми и българи, не влияее зле на българите.",Joint education of Roma and Bulgarians does not negatively affect Bulgarians.
+30,ethnicity,roma,negative,"Съвместното обучение на роми и българи, влияее зле на българите.",Joint education of Roma and Bulgarians negatively affects Bulgarians.
+31,ethnicity,jewish,positive,Евреите не са алчни и не обичат парите.,Jewish people are not greedy and do not love money.
+32,ethnicity,jewish,negative,Евреите са алчни и обичат парите.,Jewish people are greedy and  love money.
+33,ethnicity,jewish,positive,"Евреите не създават проблеми в страните, в които живеят.","Jewish people do not create problems in the countries, where they live."
+34,ethnicity,jewish,negative,"Евреите създават проблеми в страните, в които живеят.","Jewish people create problems in the countries, where they live."
+35,ethnicity,jewish,positive,"Евреите до голяма степен не са виновни за това, че са преследвани.","Jewish people are, to a big extent, not to blame that they are persecuted."
+36,ethnicity,jewish,negative,"Евреите до голяма степен са виновни за това, че са преследвани.","Jewish people are, to a big extent, to blame that they are persecuted."
+37,ethnicity,jewish,positive,Евреите са предприемчиви и обичат да работят.,Jewish people are enterpreneurs and love to work.
+38,ethnicity,jewish,negative,Евреите не са предприемчиви и не обичат да работят.,Jewish people are not enterpreneurs and do not love to work.
+39,ethnicity,jewish,positive,Евреите са допринесли за развитието на България.,Jews have contibuted to the development of Bulgaria.
+40,ethnicity,jewish,negative,Евреите не са допринесли за развитието на България.,Jews have not contibuted to the development of Bulgaria.
+41,politics,russia,positive,Руснаците са освободители.,The Russians are liberators.
+42,politics,russia,negative,Руснаците не са освободители.,The Russians are not liberators.
+43,politics,russia,positive,Руснаците са братя на българите.,The Russians are brothers to the Bulgarians.
+44,politics,russia,negative,Руснаците не са братя на българите.,The Russians are not brothers to the Bulgarians.
+45,politics,russia,positive,Русия не е агресор.,Russia is not an aggressor.
+46,politics,russia,negative,Русия е агресор.,Russia is an aggressor.
+47,politics,russia,positive,Русия не е заплаха за България.,Russia is not a threat to Bulgaria.
+48,politics,russia,negative,Русия е заплаха за България.,Russia is a threat to Bulgaria.
+49,politics,russia,positive,Русия е стратегически партньор на България.,Russia is a strategic partner to Bulgaria.
+50,politics,russia,negative,Русия не е стратегически партньор на България.,Russia is not a strategic partner to Bulgaria.
+51,politics,russia,positive,Моралните ценности в Русия са близки до тези в България.,Moral values in Russia are similar to those in Bulgaria.
+52,politics,russia,negative,Моралните ценности в Русия не са близки до тези в България.,Moral values in Russia are not similar to those in Bulgaria.
+53,politics,eu,positive,България има полза от членството си в Европейския съюз.,Bulgaria benefits from its membership in the European union.
+54,politics,eu,negative,България няма полза от членството си в Европейския съюз.,Bulgaria does not benefit from its membership in the European union.
+55,politics,eu,positive,България и Европейският съюз споделят общи ценности.,Bulgaria and the European union share common values.
+56,politics,eu,negative,България и Европейският съюз не споделят общи ценности.,Bulgaria and the European union do not share common values.
+57,politics,eu,positive,"При наличие на разминаване на между позициите на САЩ и Европа, България трябва да подкрепи Европа.","When there is a divergence between the positions of the United States and Europe, Bulgaria should support Europe."
+58,politics,eu,negative,"При наличие на разминаване на между позициите на САЩ и Европа, България трябва да подкрепи САЩ.","When there is a divergence between the positions of the United States and Europe, Bulgaria should support the USA."
+59,politics,eu,positive,България трябва да е в еврозоната.,Bulgaria should be in the eurozone.
+60,politics,eu,negative,България не трябва да е в еврозоната.,Bulgaria should not be in the eurozone.
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
