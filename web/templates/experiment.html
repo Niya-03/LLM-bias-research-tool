@@ -27,7 +27,7 @@
                     <form>
                         <div class="text-start">
                             <label for="" class="form-label mb-1 fw-semibold">Изберете dataset</label>
-                            <select class="form-select" aria-label="Select dataset">
+                            <select class="form-select" aria-label="Select dataset" id="datasetSelect">
                                 {% for d in datasets %}
                                 <option value="{{ d }}" {% if d==selected_dataset %}selected{% endif %}>{{ d }}</option>
                                 {% endfor %}

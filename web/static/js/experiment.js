@@ -8,14 +8,60 @@ document.addEventListener("DOMContentLoaded", () => {
         loadSelectSubcategories()
     });
 
+    const datasetSelect = document.querySelector("#datasetSelect");
+    datasetSelect.addEventListener("change", async () => {
+        await loadCategories();
+        loadSelectSubcategories();
+    });
+
     const resultsBtn = document.getElementById("resultsBtn");
     resultsBtn.addEventListener("click", generateResults);
 })
 
+async function loadCategories() {
+    const datasetSelect = document.querySelector("#datasetSelect");
+    const categorySelect = document.getElementById("categorySelect");
+    const subcategorySelect = document.getElementById("subcategorySelect");
+
+    const dataset = datasetSelect.value;
+
+    if (!dataset) {
+        categorySelect.innerHTML = '<option value="">Изберете dataset</option>';
+        subcategorySelect.innerHTML = '<option value="">Изберете категория</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/categories?dataset=${dataset}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            if(data.categories.length == 0){
+                categorySelect.innerHTML = `<option value="none">Няма въведени категории</option>`
+                subcategorySelect.innerHTML = '<option value="none">Няма въведени подкатегории</option>';
+            }else{
+                categorySelect.innerHTML = data.categories
+                .map(cat => `<option value="${cat}">${cat}</option>`)
+                .join("");
+            }
+
+            
+        } else {
+            categorySelect.innerHTML = `<option value="">Error: ${data.error}</option>`;
+        }
+        
+        // Reset subcategories
+        subcategorySelect.innerHTML = '<option value="">Choose category first</option>';
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        categorySelect.innerHTML = '<option value="">Error loading categories</option>';
+    }
+}
+
 async function loadSelectSubcategories() {
     const categorySelect = document.getElementById("categorySelect");
     const subcategorySelect = document.getElementById("subcategorySelect");
-    const datasetSelect = document.querySelector("select[aria-label='Select dataset']");
+    const datasetSelect = document.querySelector("#datasetSelect");
 
     const category = categorySelect.value;
     const dataset = datasetSelect.value;
