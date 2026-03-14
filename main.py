@@ -48,16 +48,19 @@ while model not in SUPPORTED_MODELS:
     print("\nEnter valid model!")
     category = input("Enter model\n")
 
-# model = input("stop here")
 
 results = experiment_runner.run_experiment(data, model)
 
 results_manager.save_results(results, category, model)
 
 
-# visualisator.plot_results(
-#     "%s/%s_%s_results_%s.json"
-#     % (RESULTS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
-#     "%s/%s_%s_results_%s.png"
-#     % (DIAGRAMS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
-# )
+visualisator.plot_results(
+    "%s/%s_%s_results_%s.json"
+    % (RESULTS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
+    "%s/%s_%s_results_%s.png"
+    % (DIAGRAMS_DIR, category, model, str(datetime.today().strftime("%Y-%m-%d"))),
+)
+
+
+
+

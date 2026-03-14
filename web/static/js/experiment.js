@@ -93,6 +93,7 @@ async function generateResults() {
     const categorySelect = document.getElementById("categorySelect");
     const subcategorySelect = document.getElementById("subcategorySelect");
     const modelSelect = document.querySelector("select[aria-label='Select a model']");
+    const loadingOverlay = document.getElementById("loadingOverlay");
 
     const dataset = datasetSelect.value;
     const category = categorySelect.value;
@@ -105,6 +106,8 @@ async function generateResults() {
     }
 
     try {
+        loadingOverlay.classList.add("active");
+
         const response = await fetch("/api/generate-results", {
             method: "POST",
             headers: {
@@ -117,6 +120,8 @@ async function generateResults() {
                 model
             })
         });
+
+        loadingOverlay.classList.remove("active");
 
         if (response.ok) {
             const blob = await response.blob();
@@ -133,6 +138,7 @@ async function generateResults() {
             alert(`Error: ${error.error}`);
         }
     } catch (error) {
+        loadingOverlay.classList.remove("active");
         console.error("Error generating results:", error);
         alert("Error generating results. Check the console for details.");
     }

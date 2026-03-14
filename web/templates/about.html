@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ИИПГЕМ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles/custom.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    {% include "partials/header.html" %}
+
+
+    <div class="container mb-4">
+        <div class="row mt-5 text-center">
+            <h2>За нас</h1>
+        </div>
+        
+        <div class="row mt-4 text-start justify-content-center">
+            <div class="col col-8 fs-6">
+                <p>С всеки ден изкуственият интелект (ИИ) навлиза все повече в ежедневието ни. 
+                    Той вече намира употреба в почти всяко устройство, което ползваме.
+                    Хора от всякакви възрасти използват ИИ асистенти, за да получат информация по различни въпроси и често не проверяват истинността на генерирания текст. 
+                    Ако твърденията в текста са неточни или подвеждащи, потребителите може да си формират грешни представи и да ги 
+                    разпространят. 
+                    Затова е важно потребителите да знаят, че отговорите на ИИ асистентите може да изглеждат обективни, 
+                    но в реалност зависят от фактори като държавата, в която са разработени, езика, на който главно са научени, 
+                    и хората, които са го създали.  
+                </p>
+
+                <p>Този инструмент предоставя възможността да се провери дали 3 популярни големи езикови модели изразяват мнение по 
+                    дадени теми и дали има разлика в мнението им, когато отговарят на български и на английски.
+                </p>
+
+                <p>Инструментът работи като задава на избрания модел твърдения, групирани по категория и подкатегория. Твърденията
+                    биват зададени на български и на английски. Освен това всяко твърдение има две версии - позитивна и негативна, като се очаква отговорите
+                    да бъдат обратни.  
+                </p>
+
+                <p>Генерираните резултати се изпращат под формата на zip файл, в който се намират два формата на резултатите и диаграми, които ги представят визуално.</p>
+            </div>
+            
+        </div>
+        
+
+
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <script type="module" src="../static/js/main.js"></script>
+    <script src="../static/js/experiment.js"></script>
+</body>
+
+</html>

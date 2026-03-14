@@ -23,6 +23,7 @@ from config import SUPPORTED_MODELS, BASE_DATASET_PATH, RESULTS_DIR
 import src.dataset_manager as dm
 import src.experimentor as experiment_runner
 import src.results_manager as results_manager
+import src.visualisator as visualisator
 
 app = Flask("app")
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -47,7 +48,10 @@ def experiment():
         models=models,
         selected_dataset=selected_dataset,
     )
-
+    
+@app.route("/about", methods=["GET"])
+def about():
+    return flask.render_template('about.html')
 
 @app.route("/addDataset", methods=["GET"])
 def addDataset():
@@ -119,20 +123,16 @@ def add_statement():
         bg_statement = data.get("bg_statement")
         en_statement = data.get("en_statement")
         
-        # Validate required fields
         if not all([dataset, category, subcategory, polarity, bg_statement, en_statement]):
             return flask.jsonify({"error": "Missing required fields"}), 400
         
-        # Build dataset path
         dataset_path = os.path.join(PROJECT_ROOT, "data", "datasets", f"{dataset}.csv")
         
         if not os.path.exists(dataset_path):
             return flask.jsonify({"error": "Dataset not found"}), 404
         
-        # Load existing CSV
         df = pd.read_csv(dataset_path)
         
-        # Create new row
         new_row = pd.DataFrame({
             "category": [category],
             "subcategory": [subcategory],
@@ -141,10 +141,8 @@ def add_statement():
             "en_statement": [en_statement]
         })
         
-        # Append to existing data
         df = pd.concat([df, new_row], ignore_index=True)
         
-        # Save back to CSV
         df.to_csv(dataset_path, index=False)
         
         return flask.jsonify({"message": "Statement added successfully"}), 200
@@ -221,6 +219,7 @@ def generate_results():
             f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.json"
         )
         resultsRaw_filename = f"{category}_{model}_raw-results_{datetime.today().strftime('%Y-%m-%d')}.json"
+        diagram_filename = f"{category}_{model}_language-diff_{datetime.today().strftime('%Y-%m-%d')}.png"
 
         results_filepath = os.path.join(
             PROJECT_ROOT, RESULTS_DIR.strip("\\"), results_filename
@@ -228,6 +227,14 @@ def generate_results():
         resultsRaw_filepath = os.path.join(
             PROJECT_ROOT, RESULTS_DIR.strip("\\"), resultsRaw_filename
         )
+        diagram_filepath = os.path.join(
+            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_filename
+        )
+
+        try:
+            visualisator.plot_language_differences(resultsRaw_filepath, diagram_filepath, category, subcategory, dataset_path)
+        except Exception as e:
+            print(f"Warning: Could not generate language difference diagram: {e}")
 
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
@@ -235,6 +242,8 @@ def generate_results():
                 zipf.write(results_filepath, arcname=results_filename)
             if os.path.exists(resultsRaw_filepath):
                 zipf.write(resultsRaw_filepath, arcname=resultsRaw_filename)
+            if os.path.exists(diagram_filepath):
+                zipf.write(diagram_filepath, arcname=diagram_filename)
 
         zip_buffer.seek(0)
         zip_filename = (
