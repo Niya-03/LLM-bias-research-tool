@@ -218,8 +218,11 @@ def generate_results():
         results_filename = (
             f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.json"
         )
+        
         resultsRaw_filename = f"{category}_{model}_raw-results_{datetime.today().strftime('%Y-%m-%d')}.json"
-        diagram_filename = f"{category}_{model}_language-diff_{datetime.today().strftime('%Y-%m-%d')}.png"
+        diagram_language_diff_filename = f"{category}_{model}_language-diff_{datetime.today().strftime('%Y-%m-%d')}.png"
+        diagram_ans_distribution_filename = f"{category}_{model}_answer-distribution_{datetime.today().strftime('%Y-%m-%d')}.png"
+
 
         results_filepath = os.path.join(
             PROJECT_ROOT, RESULTS_DIR.strip("\\"), results_filename
@@ -227,23 +230,36 @@ def generate_results():
         resultsRaw_filepath = os.path.join(
             PROJECT_ROOT, RESULTS_DIR.strip("\\"), resultsRaw_filename
         )
-        diagram_filepath = os.path.join(
-            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_filename
+        diagram_language_diff_filepath = os.path.join(
+            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_language_diff_filename
+        )
+        diagram_ans_distribution_filepath = os.path.join(
+            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_ans_distribution_filename
         )
 
         try:
-            visualisator.plot_language_differences(resultsRaw_filepath, diagram_filepath, category, subcategory, dataset_path)
+            visualisator.plot_language_differences(resultsRaw_filepath, diagram_language_diff_filepath, category, subcategory)
         except Exception as e:
             print(f"Warning: Could not generate language difference diagram: {e}")
+            
+        try:
+            visualisator.plot_distribution_stacked(resultsRaw_filepath, diagram_ans_distribution_filepath, category, subcategory)
+        except Exception as e:
+            print(f"Warning: Could not generate answer distribution diagram: {e}")
 
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
             if os.path.exists(results_filepath):
                 zipf.write(results_filepath, arcname=results_filename)
+                
             if os.path.exists(resultsRaw_filepath):
                 zipf.write(resultsRaw_filepath, arcname=resultsRaw_filename)
-            if os.path.exists(diagram_filepath):
-                zipf.write(diagram_filepath, arcname=diagram_filename)
+                
+            if os.path.exists(diagram_language_diff_filepath):
+                zipf.write(diagram_language_diff_filepath, arcname=diagram_language_diff_filename)
+                
+            if os.path.exists(diagram_ans_distribution_filepath):
+                zipf.write(diagram_ans_distribution_filepath, arcname=diagram_ans_distribution_filename)
 
         zip_buffer.seek(0)
         zip_filename = (

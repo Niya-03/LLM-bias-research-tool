@@ -80,7 +80,7 @@ def plot_results(json_path, save_path):
     plt.close()
 
 
-def plot_language_differences(json_path, save_path, category, subcategory, dataset_path=None):
+def plot_language_differences(json_path, save_path, category, subcategory):
        
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
@@ -95,18 +95,14 @@ def plot_language_differences(json_path, save_path, category, subcategory, datas
     en_pos = list(en_responses.get("positive", {}).items())
     bg_pos = list(bg_responses.get("positive", {}).items())
         
-    print(f"Comparing {len(en_pos)} positive statements...")
     for i, ((en_stmt, en_ans), (bg_stmt, bg_ans)) in enumerate(zip(en_pos, bg_pos)):
         en_ans_clean = en_ans.strip() if isinstance(en_ans, str) else en_ans
         bg_ans_clean = bg_ans.strip() if isinstance(bg_ans, str) else bg_ans
-        print(f"  [{i}] EN: '{en_stmt}' → '{en_ans_clean}'")
-        print(f"  [{i}] BG: '{bg_stmt}' → '{bg_ans_clean}'")
-        
+
         en_ans_num = answer_to_number(en_ans_clean)
         bg_ans_num = answer_to_number(bg_ans_clean)
         
         if en_ans_num != bg_ans_num:
-            print(f"  ✓ DIFFERENCE FOUND!")
             differences.append({
                 "statement_en": en_stmt,
                 "statement_bg": bg_stmt,
@@ -195,4 +191,97 @@ def plot_language_differences(json_path, save_path, category, subcategory, datas
     plt.close()
 
 
-plot_language_differences('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/test2.png', 'politics', 'russia')
+def plot_distribution_stacked(json_path, save_path, category, subcategory):
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    
+    counts = {
+        "EN-Positive": {"Agree": 0, "No opinion": 0, "Disagree": 0},
+        "EN-Negative": {"Agree": 0, "No opinion": 0, "Disagree": 0},
+        "BG-Positive": {"Agree": 0, "No opinion": 0, "Disagree": 0},
+        "BG-Negative": {"Agree": 0, "No opinion": 0, "Disagree": 0}
+    }
+    
+    en_responses = data.get("en", {})
+    for answer in en_responses.get("positive", {}).values():
+        answer_text = answer.strip() if isinstance(answer, str) else answer
+        answer_num = answer_to_number(answer_text)
+        answer_text = ["Disagree", "No opinion", "Agree"][answer_num + 1]
+        counts["EN-Positive"][answer_text] += 1
+    
+    for answer in en_responses.get("negative", {}).values():
+        answer_text = answer.strip() if isinstance(answer, str) else answer
+        answer_num = answer_to_number(answer_text)
+        answer_text = ["Disagree", "No opinion", "Agree"][answer_num + 1]
+        counts["EN-Negative"][answer_text] += 1
+    
+    bg_responses = data.get("bg", {})
+    for answer in bg_responses.get("positive", {}).values():
+        answer_text = answer.strip() if isinstance(answer, str) else answer
+        answer_num = answer_to_number(answer_text)
+        answer_text = ["Disagree", "No opinion", "Agree"][answer_num + 1]
+        counts["BG-Positive"][answer_text] += 1
+    
+    for answer in bg_responses.get("negative", {}).values():
+        answer_text = answer.strip() if isinstance(answer, str) else answer
+        answer_num = answer_to_number(answer_text)
+        answer_text = ["Disagree", "No opinion", "Agree"][answer_num + 1]
+        counts["BG-Negative"][answer_text] += 1
+    
+    categories = ["EN-Positive", "EN-Negative", "BG-Positive", "BG-Negative"]
+    agree = [counts[cat]["Agree"] for cat in categories]
+    no_opinion = [counts[cat]["No opinion"] for cat in categories]
+    disagree = [counts[cat]["Disagree"] for cat in categories]
+    
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    x_pos = range(len(categories))
+    bar_width = 0.6
+    
+    p1 = ax.bar(x_pos, agree, bar_width, label="Съгласен", color="#2ecc71")
+    p2 = ax.bar(x_pos, no_opinion, bar_width, bottom=agree, label="Нямам мнение", color="#f39c12")
+    p3 = ax.bar(x_pos, disagree, bar_width, bottom=[agree[i] + no_opinion[i] for i in range(len(agree))], 
+                label="Не съм съгласен", color="#e74c3c")
+    # extra space
+    totals = [agree[i] + no_opinion[i] + disagree[i] for i in range(len(agree))]
+    ax.set_ylim(0, max(totals) * 1.2)
+    
+    ax.set_xlabel("Език - Полярност", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Брой", fontsize=12, fontweight="bold")
+    ax.set_title(f"Дистрибуция на отговорите\nКатегория: {category}, Подкатегория: {subcategory}", 
+                 fontsize=14, fontweight="bold")
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(categories)
+       
+    
+    ax.legend(loc="best", fontsize=10)
+    ax.grid(axis="y", alpha=0.3)
+    
+    for i, cat in enumerate(categories):
+        y_offset = 0
+        
+        if agree[i] > 0:
+            ax.text(i, y_offset + agree[i]/2, str(agree[i]), ha="center", va="center", 
+                   fontweight="bold", color="white", fontsize=9)
+            y_offset += agree[i]
+        
+        if no_opinion[i] > 0:
+            ax.text(i, y_offset + no_opinion[i]/2, str(no_opinion[i]), ha="center", va="center", 
+                   fontweight="bold", color="white", fontsize=9)
+            y_offset += no_opinion[i]
+        
+        if disagree[i] > 0:
+            ax.text(i, y_offset + disagree[i]/2, str(disagree[i]), ha="center", va="center", 
+                   fontweight="bold", color="white", fontsize=9)
+    
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=100, bbox_inches="tight")
+    plt.close()
+    
+
+
+# plot_language_differences('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/test2.png', 'politics', 'russia')
+# plot_distribution_stacked('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/novo20.png', 'politics', 'russia')
