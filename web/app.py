@@ -5,7 +5,7 @@ from time import sleep
 import zipfile
 from io import BytesIO
 import pandas as pd
-from flask import Flask, request, Response, send_file
+from flask import Flask, request, Response, send_file, session
 import flask
 from flask_cors import CORS
 import sys
@@ -19,13 +19,16 @@ from utils.data_loader import (
     load_categories_list,
     load_subcategories_list,
 )
-from config import SUPPORTED_MODELS, BASE_DATASET_PATH, RESULTS_DIR
+from config import SUPPORTED_MODELS, DIAGRAMS_DIR, RESULTS_DIR
 import src.dataset_manager as dm
 import src.experimentor as experiment_runner
 import src.results_manager as results_manager
 import src.visualisator as visualisator
 
 app = Flask("app")
+
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
@@ -152,7 +155,8 @@ def add_statement():
 
 @app.route("/results", methods=["GET"])
 def results():
-    return flask.render_template("results.html")
+    diagrams = session.get('diagrams', [])
+    return flask.render_template("results.html", diagrams=diagrams)
 
 @app.route("/api/categories", methods=["GET"])
 def get_categories():
@@ -215,13 +219,12 @@ def generate_results():
         results_manager.save_results(results["results"], category, model)
         results_manager.save_results_raw(results["resultsRaw"], category, model)
 
-        results_filename = (
-            f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d')}.json"
-        )
+        results_filename = f"{category}_{model}_results_{datetime.today().strftime('%Y-%m-%d_%H-%M')}.json"       
+        resultsRaw_filename = f"{category}_{model}_raw-results_{datetime.today().strftime('%Y-%m-%d_%H-%M')}.json"
         
-        resultsRaw_filename = f"{category}_{model}_raw-results_{datetime.today().strftime('%Y-%m-%d')}.json"
-        diagram_language_diff_filename = f"{category}_{model}_language-diff_{datetime.today().strftime('%Y-%m-%d')}.png"
-        diagram_ans_distribution_filename = f"{category}_{model}_answer-distribution_{datetime.today().strftime('%Y-%m-%d')}.png"
+        diagram_language_diff_filename = f"{category}_{model}_language-diff_{datetime.today().strftime('%Y-%m-%d_%H-%M')}.png"
+        diagram_ans_distribution_filename = f"{category}_{model}_answer-distribution_{datetime.today().strftime('%Y-%m-%d_%H-%M')}.png"
+        diagram_polarity_consistency_filename = f"{category}_{model}_polarity-consistency_{datetime.today().strftime('%Y-%m-%d_%H-%M')}.png"
 
 
         results_filepath = os.path.join(
@@ -231,10 +234,13 @@ def generate_results():
             PROJECT_ROOT, RESULTS_DIR.strip("\\"), resultsRaw_filename
         )
         diagram_language_diff_filepath = os.path.join(
-            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_language_diff_filename
+            PROJECT_ROOT, DIAGRAMS_DIR.strip("\\"), diagram_language_diff_filename
         )
         diagram_ans_distribution_filepath = os.path.join(
-            PROJECT_ROOT, RESULTS_DIR.strip("\\"), diagram_ans_distribution_filename
+            PROJECT_ROOT, DIAGRAMS_DIR.strip("\\"), diagram_ans_distribution_filename
+        )
+        diagram_polarity_consistency_filepath = os.path.join(
+            PROJECT_ROOT, DIAGRAMS_DIR.strip("\\"), diagram_polarity_consistency_filename
         )
 
         try:
@@ -246,6 +252,16 @@ def generate_results():
             visualisator.plot_distribution_stacked(resultsRaw_filepath, diagram_ans_distribution_filepath, category, subcategory)
         except Exception as e:
             print(f"Warning: Could not generate answer distribution diagram: {e}")
+            
+        try:
+            visualisator.plot_polarity_consistency(resultsRaw_filepath, diagram_polarity_consistency_filepath, category, subcategory)
+        except Exception as e:
+            print(f"Warning: Could not generate answer distribution diagram: {e}")
+            
+        
+
+        session['diagrams'] = [diagram_language_diff_filename, diagram_ans_distribution_filename, diagram_polarity_consistency_filename]
+
 
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
@@ -260,6 +276,9 @@ def generate_results():
                 
             if os.path.exists(diagram_ans_distribution_filepath):
                 zipf.write(diagram_ans_distribution_filepath, arcname=diagram_ans_distribution_filename)
+                
+            if os.path.exists(diagram_polarity_consistency_filepath):
+                zipf.write(diagram_polarity_consistency_filepath, arcname=diagram_polarity_consistency_filename)
 
         zip_buffer.seek(0)
         zip_filename = (
@@ -274,6 +293,7 @@ def generate_results():
         )
     except Exception as e:
         return flask.jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == "__main__":

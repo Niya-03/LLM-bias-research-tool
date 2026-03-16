@@ -281,7 +281,105 @@ def plot_distribution_stacked(json_path, save_path, category, subcategory):
     plt.savefig(save_path, dpi=100, bbox_inches="tight")
     plt.close()
     
+def plot_polarity_consistency(json_path, save_path, category, subcategory):
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
+    results = {
+        "EN": [],
+        "BG": []
+    }
+
+    def score(answer):
+        answer_num = answer_to_number(answer)
+        return answer_num  
+
+    en_pos = list(data.get("en", {}).get("positive", {}).values())
+    en_neg = list(data.get("en", {}).get("negative", {}).values())
+
+    for pos, neg in zip(en_pos, en_neg):
+        pos_score = score(pos)
+        neg_score = score(neg)
+        consistency = pos_score + neg_score
+        results["EN"].append(consistency)
+
+    bg_pos = list(data.get("bg", {}).get("positive", {}).values())
+    bg_neg = list(data.get("bg", {}).get("negative", {}).values())
+
+    for pos, neg in zip(bg_pos, bg_neg):
+        pos_score = score(pos)
+        neg_score = score(neg)
+        consistency = pos_score + neg_score
+        results["BG"].append(consistency)
+
+    labels = list(data["bg"]["positive"].keys())
+
+    y_pos = range(len(labels))
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    #######
+    # plt.subplots_adjust(bottom=0.25)
+
+#     description = (
+#         "Описание:\n\n"
+#         "Резултат = 0 → логически консистентен\n"
+#         "Резултат = ±1 → не напълно консистентен\n"
+#         "Резултат = ±2 → противоречие\n\n"
+#         "Резултатът се смята по следния начин:\n"
+#         "консистентност = позитивен резултат + негативен резултат.\n\n"
+#         "Резултатът показва дали моделът отговаря\n"
+#         "логически, когато се смени полярността на твърдението."
+#     )
+
+#     fig.text(
+#     0.1, 0.2,                 
+#     description,
+#     fontsize=10,
+#     va="top",
+#     ha="center",
+#     bbox=dict(facecolor="white", edgecolor="gray", boxstyle="round,pad=0.5")
+# )
+    ######
+
+    ax.barh(
+        [y - 0.2 for y in y_pos],
+        results["EN"],
+        height=0.4,
+        label="Английски",
+        color="#3498db"
+    )
+
+    ax.barh(
+        [y + 0.2 for y in y_pos],
+        results["BG"],
+        height=0.4,
+        label="Български",
+        color="#9b59b6"
+    )
+
+    ax.axvline(0, color="black", linewidth=1)
+
+    ax.set_xlim(-2.5, 2.5)
+
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+
+    ax.set_xlabel("Резултат на консистентност в полярността", fontweight="bold")
+    ax.set_title(
+        f"Консистентност на отговорите в двете полярности\nКатегория: {category}, Подкатегория: {subcategory}",
+        fontweight="bold"
+    )
+
+    ax.legend()
+    ax.grid(axis="x", alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=100, bbox_inches="tight")
+    plt.close()
+    
 # plot_language_differences('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/test2.png', 'politics', 'russia')
 # plot_distribution_stacked('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/novo20.png', 'politics', 'russia')
+#plot_polarity_consistency('data/results/politics_gpt-5-nano_raw-results_2026-03-13.json', 'data/results/novo30.png', 'politics', 'russia')

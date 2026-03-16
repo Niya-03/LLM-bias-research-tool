@@ -50,7 +50,6 @@ async function loadCategories() {
             categorySelect.innerHTML = `<option value="">Error: ${data.error}</option>`;
         }
         
-        // Reset subcategories
         subcategorySelect.innerHTML = '<option value="">Choose category first</option>';
     } catch (error) {
         console.error("Error fetching categories:", error);
@@ -133,6 +132,8 @@ async function generateResults() {
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+
+            window.location.replace("/results");
         } else {
             const error = await response.json();
             alert(`Error: ${error.error}`);
